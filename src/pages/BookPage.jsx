@@ -1,8 +1,17 @@
-import { useWebMCP } from '@mcp-b/react-webmcp'
-import { z } from 'zod'
+import { useWebMCP } from "usewebmcp";
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { RESTAURANTS } from '../data'
+
+const BOOK_TABLE_SCHEMA = {
+  type: "object",
+  properties: {
+    guest_name: { type: "string", description: "Guest's full name" },
+    email: { type: "string", description: "Email address for confirmation" },
+    special_requests: { type: "string", description: "Dietary needs or seating preferences" },
+  },
+  required: ["guest_name", "email"],
+};
 
 export default function BookPage() {
   const { state } = useLocation()
@@ -14,11 +23,7 @@ export default function BookPage() {
   useWebMCP({
     name: 'book_table',
     description: 'Reserve a table at the restaurant with guest details',
-    inputSchema: {
-      guest_name:       z.string().describe("Guest's full name"),
-      email:            z.string().email().describe('Email address for confirmation'),
-      special_requests: z.string().optional().describe('Dietary needs or seating preferences'),
-    },
+    inputSchema: BOOK_TABLE_SCHEMA,
     handler: async ({ guest_name, email, special_requests }) => {
       const ref = 'RES-' + Math.floor(Math.random() * 9000 + 1000)
       navigate('/confirm', {

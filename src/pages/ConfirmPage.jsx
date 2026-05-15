@@ -1,8 +1,21 @@
-import { useWebMCP } from '@mcp-b/react-webmcp'
-import { z } from 'zod'
+import { useWebMCP } from 'usewebmcp'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { RESTAURANTS } from '../data'
 
+const MODIY_RESERVATION_SCHEMA = {
+  type: "object",
+  properties: {
+    reservation_id: { type: "string", description: "Cuisine type or restaurant name" },
+    new_slot: { type: "string", description: "Date in YYYY-MM-DD format" },
+  },
+};
+
+const CANCEL_RESERVATION_SCHEMA = {
+  type: "object",
+  properties: {
+    reservation_id: { type: "string", description: "Cuisine type or restaurant name" },
+  },
+};
 export default function ConfirmPage() {
   const { state } = useLocation()
   const navigate = useNavigate()
@@ -11,10 +24,7 @@ export default function ConfirmPage() {
   useWebMCP({
     name: 'modify_reservation',
     description: 'Change the time slot of an existing reservation',
-    inputSchema: {
-      reservation_id: z.string(),
-      new_slot: z.string().optional(),
-    },
+    inputSchema: MODIY_RESERVATION_SCHEMA,
     handler: async ({ new_slot }) => {
       navigate('/book', { state: { ...state, slot: new_slot ?? state.slot } })
       return { success: true }
@@ -24,9 +34,7 @@ export default function ConfirmPage() {
   useWebMCP({
     name: 'cancel_reservation',
     description: 'Cancel the current reservation and return to search',
-    inputSchema: {
-      reservation_id: z.string(),
-    },
+    inputSchema: CANCEL_RESERVATION_SCHEMA,
     handler: async () => {
       navigate('/')
       return { success: true, message: 'Reservation cancelled' }
