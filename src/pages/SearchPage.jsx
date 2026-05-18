@@ -48,13 +48,14 @@ const SELECT_SCHEMA = {
 // React guarantees state setters (setResults, setNameFilter) are stable,
 // so passing them as args is safe.
 
-function runSearch(q, d, setResults, setNameFilter) {
+function runSearch({query, date, setResults, setNameFilter}) {
+  console.log({setResults})
   const matches = RESTAURANTS.filter(
-    (r) =>
-      !q ||
-      r.name.toLowerCase().includes(q.toLowerCase()) ||
-      r.cuisine.toLowerCase().includes(q.toLowerCase())
-  ).filter((r) => !d || r.availableDates.includes(d));
+    (restaurant) =>
+      !query ||
+    restaurant.name.toLowerCase().includes(query.toLowerCase()) ||
+    restaurant.cuisine.toLowerCase().includes(query.toLowerCase())
+  ).filter((restaurant) => !date || restaurant.availableDates.includes(date));
 
   setResults(matches);
   setNameFilter("");
@@ -98,7 +99,7 @@ export default function SearchPage() {
       setDate(date);
       setPartySize(party_size);
 
-      const matches = runSearch(query, date, setResults, setNameFilter);
+      const matches = runSearch({ query, date, setResults, setNameFilter });
 
       if (matches.length === 0) {
         return {
@@ -193,7 +194,7 @@ export default function SearchPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    runSearch(query, date, setResults, setNameFilter);
+    runSearch({query, date, setResults, setNameFilter});
   }
 
 

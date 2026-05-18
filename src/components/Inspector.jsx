@@ -49,7 +49,7 @@ export default function Inspector() {
 
   return (
     <div style={{ borderLeft: '1px solid #eee', padding: 16, background: '#fafafa', overflowY: 'auto' }}>
-      <h3>WebMCP Inspector</h3>
+      <h3 style={{ color: "black" }}>WebMCP Inspector</h3>
       {!shimReady && (
         <p style={{ fontSize: 12, color: '#aaa' }}>Waiting for modelContextTesting…</p>
       )}
