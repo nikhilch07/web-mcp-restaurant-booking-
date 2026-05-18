@@ -1,52 +1,45 @@
-import { useWebMCP } from 'usewebmcp'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { RESTAURANTS } from '../data'
+import { useWebMCP } from "@mcp-b/react-webmcp";
+import { useNavigate, useLocation } from "react-router-dom";
+import { z } from "zod";
+import { RESTAURANTS } from "../data";
 
-const MODIY_RESERVATION_SCHEMA = {
-  type: "object",
-  properties: {
-    reservation_id: { type: "string", description: "Cuisine type or restaurant name" },
-    new_slot: { type: "string", description: "Date in YYYY-MM-DD format" },
-  },
+// ── Zod schemas — defined outside component, stable references ─────────────
+
+const MODIFY_RESERVATION_SCHEMA = {
+  reservation_id: z
+    .string()
+    .describe(
+      'Reference number of the reservation to modify. Example: "RES-20260520-1234"'
+    ),
+  new_slot: z
+    .string()
+    .describe(
+      'New time slot to switch to. Must be a valid slot for the restaurant. Example: "8:00 pm"'
+    ),
 };
 
 const CANCEL_RESERVATION_SCHEMA = {
-  type: "object",
-  properties: {
-    reservation_id: { type: "string", description: "Cuisine type or restaurant name" },
-  },
+  reservation_id: z
+    .string()
+    .describe(
+      'Reference number of the reservation to cancel. Example: "RES-20260520-1234"'
+    ),
 };
+
+
 export default function ConfirmPage() {
-  const { state } = useLocation()
-  const navigate = useNavigate()
-  const restaurant = RESTAURANTS.find(r => r.id === state?.restaurant_id)
-
-  useWebMCP({
-    name: 'modify_reservation',
-    description: 'Change the time slot of an existing reservation',
-    inputSchema: MODIY_RESERVATION_SCHEMA,
-    handler: async ({ new_slot }) => {
-      navigate('/book', { state: { ...state, slot: new_slot ?? state.slot } })
-      return { success: true }
-    },
-  })
-
-  useWebMCP({
-    name: 'cancel_reservation',
-    description: 'Cancel the current reservation and return to search',
-    inputSchema: CANCEL_RESERVATION_SCHEMA,
-    handler: async () => {
-      navigate('/')
-      return { success: true, message: 'Reservation cancelled' }
-    },
-  })
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const restaurant = RESTAURANTS.find((r) => r.id === state?.restaurant_id);
 
   return (
     <div className="confirm-page">
       <div className="confirmation-header">
         <div className="success-icon">✓</div>
         <h1>Reservation Confirmed!</h1>
-        <p className="confirmation-subtitle">Your table has been successfully booked. Details below.</p>
+        <p className="confirmation-subtitle">
+          Your table has been successfully booked. Details below.
+        </p>
       </div>
 
       <div className="reservation-details">
@@ -102,13 +95,14 @@ export default function ConfirmPage() {
 
         <section className="confirmation-actions">
           <p className="confirmation-note">
-            A confirmation email has been sent to <strong>{state?.email}</strong> with these details.
+            A confirmation email has been sent to{" "}
+            <strong>{state?.email}</strong> with these details.
           </p>
           <div className="action-buttons">
             <button
               type="button"
               className="primary-button"
-              onClick={() => navigate('/')}
+              onClick={() => navigate("/")}
             >
               Make Another Reservation
             </button>
@@ -123,5 +117,5 @@ export default function ConfirmPage() {
         </section>
       </div>
     </div>
-  )
+  );
 }

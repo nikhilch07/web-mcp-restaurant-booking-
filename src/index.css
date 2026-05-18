@@ -608,6 +608,8 @@ body {
 
 .back-link {
   align-self: flex-start;
+  align-items: flex-start;
+  justify-self: start;
   border: none;
   background: transparent;
   color: #8c30e9;
@@ -798,4 +800,56 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.clear-btn {
+  padding: 8px 12px;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Restaurant badge dates */
+.restaurant-badge-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.restaurant-badge-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.date-chip {
+  font-size: 11px;
+  padding: 2px 7px;
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-secondary);
+}
+
+.date-chip-more {
+  color: var(--color-text-tertiary);
+}
+
+.no-results {
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  padding: 16px 0;
 }
